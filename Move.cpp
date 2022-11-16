@@ -20,18 +20,64 @@ using namespace std;
 
 Move::Move(string commandString) : Move() {
     //TODO: Implement non-default constructor
+    stringstream ss(commandString);
+    char e;
+    char move;
+    if (commandString == "") {
+        isPass = true;
+    }
+    else if (commandString == "s" || commandString == "S") {
+        isSave = true;
+    }
+    else if (commandString == "Q" || commandString == "q") {
+        isQuit = true;
+    }
+    else {
+        ss >> e >> elevatorId >> move;
+        if ( move == 'p') {
+            isPickup = true;
+        }
+        else if (move == 'f') {
+            ss >> targetFloor;
+        }
+    }
 }
 
 bool Move::isValidMove(Elevator elevators[NUM_ELEVATORS]) const {
     //TODO: Implement isValidMove
-    
+    if (isPassMove() == true ||
+        isQuitMove() == true ||
+        isSaveMove() == true) {
+        return true;
+    }
+    else if (elevatorId >= 0 && elevatorId <NUM_ELEVATORS && elevators[elevatorId].isServicing() == false) {
+        if (isPickupMove() == true) {
+            return true;
+        }
+        else if (isPickupMove() != true && targetFloor >= 0 && targetFloor < NUM_FLOORS && elevators[elevatorId].getCurrentFloor() != targetFloor) {
+            return true;
+        }
+    }
     //Returning false to prevent compilation error
     return false;
 }
 
 void Move::setPeopleToPickup(const string& pickupList, const int currentFloor, const Floor& pickupFloor) {
     //TODO: Implement setPeopleToPickup
+    numPeopleToPickup = 0;
+    totalSatisfaction = 0;
+    for (int i = 0; i < pickupList.length(); i++ ) {
+        targetFloor = currentFloor;
+        peopleToPickup[i] = pickupList.at(i) - '0';
+        numPeopleToPickup++;
+        totalSatisfaction = totalSatisfaction + (MAX_ANGER - pickupFloor.getPersonByIndex(peopleToPickup[i]).getAngerLevel());
+        if (fabs(pickupFloor.getPersonByIndex(peopleToPickup[i]).getTargetFloor() - currentFloor) > fabs(targetFloor - currentFloor)) {
+            targetFloor = pickupFloor.getPersonByIndex(peopleToPickup[i]).getTargetFloor();
+        }
+    }
+   
 }
+
 
 //////////////////////////////////////////////////////
 ////// DO NOT MODIFY ANY CODE BENEATH THIS LINE //////
