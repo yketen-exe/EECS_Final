@@ -23,19 +23,19 @@ void Building::spawnPerson(Person newPerson){
 
 void Building::update(Move move){
     //TODO: Implement update
+   int id = move.getElevatorId();
     if (move.isPassMove() == true) {
         return;
     }
     else {
-        int id = move.getElevatorId();
-        int target = move.getTargetFloor();
-        elevators[id].serviceRequest(target);
         if (move.isPickupMove() == true) {
             int temp[MAX_PEOPLE_PER_FLOOR] = {};
             move.copyListOfPeopleToPickup(temp);
             int floor = elevators[id].getCurrentFloor();
             floors[floor].removePeople(temp, move.getNumPeopleToPickup());
         }
+        int target = move.getTargetFloor();
+        elevators[id].serviceRequest(target);
     }
     
     
