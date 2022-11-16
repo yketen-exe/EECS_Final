@@ -14,15 +14,32 @@
 #include <iostream>
 
 using namespace std;
-
 void Elevator::tick(int currentTime) {
     //TODO: Implement tick
+    if (currentTime % TICKS_PER_ELEVATOR_MOVE == 0 && servicing == true) {
+        if (currentFloor > targetFloor) {
+            currentFloor -= 1;
+        }
+        else if (currentFloor < targetFloor) {
+            currentFloor+= 1;
+        }
+    }
+    if (currentFloor == targetFloor) {
+        servicing = false;
+    }
 }
-
+/**
+ * Requires: 0 <= floorNum <= NUM_FLOORS
+ * Modifies: targetFloor, servicing
+ * Effects:  Sets the targetFloor and marks the Elevator as
+ *           currently servicing
+ */
 void Elevator::serviceRequest(int floorNum) {
     //TODO: Implement serviceRequest
+    targetFloor = floorNum;
+    servicing = true;
+    
 }
-
 //////////////////////////////////////////////////////
 ////// DO NOT MODIFY ANY CODE BENEATH THIS LINE //////
 //////////////////////////////////////////////////////
