@@ -17,22 +17,63 @@ using namespace std;
 
 int Floor::tick(int currentTime) {
     //TODO: Implement tick
-
+    int explodedNumber = 0;
+    int explodedIndex[explodedNumber];
+    for (int i = 0; i < numPeople; i++) {
+        if (people[i].tick(currentTime) == true) {
+            explodedIndex[explodedNumber] = i;
+            explodedNumber ++;
+           
+        }
+    }
+    removePeople(explodedIndex, explodedNumber);
     //returning 0 to prevent compilation error
-    return 0;
+    return explodedNumber;
 }
 
 void Floor::addPerson(Person newPerson, int request) {
     //TODO: Implement addPerson
+    if (numPeople < MAX_PEOPLE_PER_FLOOR) {
+        people[numPeople] = newPerson;
+        numPeople ++;
+    }
+    if (request > 0) {
+        hasUpRequest = true;
+    }
+    else if (request < 0) {
+        hasDownRequest = true;
+    }
 }
 
 void Floor::removePeople(int indicesToRemove[MAX_PEOPLE_PER_FLOOR], int numPeopleToRemove) {
     //TODO: Implement removePeople
+ Person temp[MAX_PEOPLE_PER_FLOOR] = {};
+    int index = 0;
+    for (int i=0; i < numPeople; i++) {
+        bool add = true;
+        for (int j = 0; j < numPeopleToRemove; j++) {
+            if (i == indicesToRemove[j]) {
+                add = false;
+            }
+            else if (i != indicesToRemove[j]) {
+                add = true;
+            }
+        }
+        if (add == true) {
+            temp[index] = people[i];
+            index = index + 1;
+        }
+    }
+    numPeople = 0;
+    for (int m = 0; m < index; m++) {
+        people[m] = temp[m];
+        numPeople = index;
+    }
+    
+        resetRequests();
+			
 }
 
-void Floor::resetRequests() {
-    //TODO: Implement resetRequests
-}
 
 //////////////////////////////////////////////////////
 ////// DO NOT MODIFY ANY CODE BENEATH THIS LINE //////
