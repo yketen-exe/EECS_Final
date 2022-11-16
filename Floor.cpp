@@ -45,34 +45,22 @@ void Floor::addPerson(Person newPerson, int request) {
     }
 }
 
+
 void Floor::removePeople(int indicesToRemove[MAX_PEOPLE_PER_FLOOR], int numPeopleToRemove) {
     //TODO: Implement removePeople
- Person temp[MAX_PEOPLE_PER_FLOOR] = {};
-    int index = 0;
-    for (int i=0; i < numPeople; i++) {
-        bool add = true;
-        for (int j = 0; j < numPeopleToRemove; j++) {
-            if (i == indicesToRemove[j]) {
-                add = false;
-            }
-            else if (i != indicesToRemove[j]) {
-                add = true;
-            }
+    sort(indicesToRemove, indicesToRemove + numPeopleToRemove);
+    int currentRemove = numPeopleToRemove - 1;
+    for (int i = 0; i < numPeopleToRemove; i++) {
+        int index = indicesToRemove[currentRemove];
+        for (int j = index; j < numPeople; j++) {
+            people[j] = people[j+1];
         }
-        if (add == true) {
-            temp[index] = people[i];
-            index = index + 1;
-        }
+        numPeople --;
+        currentRemove--;
     }
-    numPeople = 0;
-    for (int m = 0; m < index; m++) {
-        people[m] = temp[m];
-    }
-	numPeople = index;
-    
-        resetRequests();
-			
+    resetRequests();
 }
+			
 void Floor::resetRequests() {
     //TODO: Implement resetRequests
     hasUpRequest = false;
