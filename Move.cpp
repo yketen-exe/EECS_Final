@@ -66,11 +66,11 @@ void Move::setPeopleToPickup(const string& pickupList, const int currentFloor, c
     //TODO: Implement setPeopleToPickup
     numPeopleToPickup = 0;
     totalSatisfaction = 0;
+    targetFloor = currentFloor;
     for (int i = 0; i < pickupList.length(); i++ ) {
-        targetFloor = currentFloor;
         peopleToPickup[i] = pickupList.at(i) - '0';
         numPeopleToPickup++;
-        totalSatisfaction = totalSatisfaction + (MAX_ANGER - pickupFloor.getPersonByIndex(peopleToPickup[i]).getAngerLevel());
+        totalSatisfaction += (MAX_ANGER - pickupFloor.getPersonByIndex(peopleToPickup[i]).getAngerLevel());
         if (fabs(pickupFloor.getPersonByIndex(peopleToPickup[i]).getTargetFloor() - currentFloor) > fabs(targetFloor - currentFloor)) {
             targetFloor = pickupFloor.getPersonByIndex(peopleToPickup[i]).getTargetFloor();
         }
