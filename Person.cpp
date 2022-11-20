@@ -4,8 +4,8 @@
  * Person.cpp
  * Project UID 28eb18c2c1ce490aada441e65559efdd
  *
- * <#Names#>
- * <#Uniqnames#>
+ * Alec Murrell, Ethan George, Joey Painter, Sophia Liang
+ * alecmurr, eten, painterj, sxliang
  *
  * Final Project - Elevators
  */
@@ -18,7 +18,6 @@
 using namespace std;
 
 Person::Person(string inputString) : Person() {
-    //TODO: Implement non-default constructor
     stringstream ss(inputString);
     char temporary;
     ss >> turn >> temporary >> currentFloor;
@@ -27,7 +26,6 @@ Person::Person(string inputString) : Person() {
 }
 
 bool Person::tick(int currentTime) {
-    //TODO: Implement tick
     if (currentTime % TICKS_PER_ANGER_INCREASE == 0 ) {
         angerLevel += 1;
     }
@@ -40,9 +38,7 @@ bool Person::tick(int currentTime) {
 }
 
 void Person::print(ostream &outs) {    
-    //TODO: Implement print
     outs << "f" << currentFloor << "t" << targetFloor << "a" << angerLevel;
-    
 }
 
 

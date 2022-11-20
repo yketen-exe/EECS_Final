@@ -4,8 +4,8 @@
  * Building.cpp
  * Project UID 28eb18c2c1ce490aada441e65559efdd
  *
- * <#Names#>
- * <#Uniqnames#>
+ * Alec Murrell, Ethan George, Joey Painter, Sophia Liang
+ * alecmurr, eten, painterj, sxliang
  *
  * Final Project - Elevators
  */
@@ -15,14 +15,12 @@
 using namespace std;
 
 void Building::spawnPerson(Person newPerson){
-    //TODO: Implement spawnPerson
     int temp = newPerson.getCurrentFloor();
     int request = newPerson.getTargetFloor() - newPerson.getCurrentFloor();
     floors[temp].addPerson(newPerson, request);
 }
 
 void Building::update(Move move){
-    //TODO: Implement update
    int id = move.getElevatorId();
     if (move.isPassMove() == true) {
         return;
@@ -43,7 +41,6 @@ void Building::update(Move move){
 
 
 int Building::tick(Move move){
-    //TODO: Implement tick
     time++;
     update(move);
     int explodedNumber = 0;

@@ -4,8 +4,8 @@
  * Elevator.cpp
  * Project UID 28eb18c2c1ce490aada441e65559efdd
  *
- * <#Names#>
- * <#Uniqnames#>
+ * Alec Murrell, Ethan George, Joey Painter, Sophia Liang
+ * alecmurr, eten, painterj, sxliang
  *
  * Final Project - Elevators
  */
@@ -15,7 +15,6 @@
 
 using namespace std;
 void Elevator::tick(int currentTime) {
-    //TODO: Implement tick
     if (currentTime % TICKS_PER_ELEVATOR_MOVE == 0 && servicing == true) {
         if (currentFloor > targetFloor) {
             currentFloor -= 1;
@@ -28,6 +27,7 @@ void Elevator::tick(int currentTime) {
         servicing = false;
     }
 }
+
 /**
  * Requires: 0 <= floorNum <= NUM_FLOORS
  * Modifies: targetFloor, servicing
@@ -35,7 +35,6 @@ void Elevator::tick(int currentTime) {
  *           currently servicing
  */
 void Elevator::serviceRequest(int floorNum) {
-    //TODO: Implement serviceRequest
     targetFloor = floorNum;
     servicing = true;
     

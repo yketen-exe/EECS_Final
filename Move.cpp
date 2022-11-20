@@ -4,8 +4,8 @@
  * Move.cpp
  * Project UID 28eb18c2c1ce490aada441e65559efdd
  *
- * <#Names#>
- * <#Uniqnames#>
+ * Alec Murrell, Ethan George, Joey Painter, Sophia Liang
+ * alecmurr, eten, painterj, sxliang
  *
  * Final Project - Elevators
  */
@@ -19,7 +19,6 @@
 using namespace std;
 
 Move::Move(string commandString) : Move() {
-    //TODO: Implement non-default constructor
     stringstream ss(commandString);
     char e;
     char move;
@@ -44,7 +43,6 @@ Move::Move(string commandString) : Move() {
 }
 
 bool Move::isValidMove(Elevator elevators[NUM_ELEVATORS]) const {
-    //TODO: Implement isValidMove
     if (isPassMove() == true ||
         isQuitMove() == true ||
         isSaveMove() == true) {
@@ -58,16 +56,14 @@ bool Move::isValidMove(Elevator elevators[NUM_ELEVATORS]) const {
             return true;
         }
     }
-    //Returning false to prevent compilation error
     return false;
 }
 
 void Move::setPeopleToPickup(const string& pickupList, const int currentFloor, const Floor& pickupFloor) {
-    //TODO: Implement setPeopleToPickup
     numPeopleToPickup = 0;
     totalSatisfaction = 0;
     targetFloor = currentFloor;
-    for (int i = 0; i < pickupList.length(); i++ ) {
+    for (size_t i = 0; i < pickupList.length(); i++ ) {
         peopleToPickup[i] = pickupList.at(i) - '0';
         numPeopleToPickup++;
         totalSatisfaction += (MAX_ANGER - pickupFloor.getPersonByIndex(peopleToPickup[i]).getAngerLevel());

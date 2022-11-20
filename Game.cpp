@@ -4,8 +4,8 @@
  * Game.cpp
  * Project UID 28eb18c2c1ce490aada441e65559efdd
  *
- * <#Names#>
- * <#Uniqnames#>
+ * Alec Murrell, Ethan George, Joey Painter, Sophia Liang
+ * alecmurr, eten, painterj, sxliang
  *
  * Final Project - Elevators
  */
@@ -17,14 +17,32 @@
 #include "Utility.h"
 using namespace std;
 
-// Stub for playGame for Core, which plays random games
-// You *must* revise this function according to the RME and spec
+/**
+ * Requires: nothing
+ * Modifies: cout, isAIMode, building, satisfactionIndex
+ * Effects:  if game input file is not open, exits with status 1
+ *           sets isAIMode
+ *           prints game start prompt
+ *           else reads events from game input file
+ *           if event is happening on current turn, updates building
+ *           with event else prints building and checks if game has
+ *           ended, if it hasn't yet, gets user (player or AI) move,
+ *           and updates building with move.
+ */
 void Game::playGame(bool isAIModeIn, ifstream& gameFile) {
     std::mt19937 gen(1);
     std::uniform_int_distribution<> floorDist(0, 9);
     std::uniform_int_distribution<> angerDist(0, 3);
 
+    // if game input file is not open, exits with status 1
+    if (!gameFile.is_open()) {
+        exit(1);
+    }
+
+    // sets isAIMode
     isAIMode = isAIModeIn;
+
+    // prints game start prompt and reads events from game input file
     printGameStartPrompt();
     initGame(gameFile);
 
@@ -47,9 +65,59 @@ void Game::playGame(bool isAIModeIn, ifstream& gameFile) {
     }
 }
 
-// Stub for isValidPickupList for Core
-// You *must* revise this function according to the RME and spec
+/**
+ * Requires: pickupFloorNum is the floor the pickup move was called on
+ * Modifies: nothing
+ * Effects:  determines if pickupList is a valid
+ *           list of people to pick up
+ */
 bool Game::isValidPickupList(const string& pickupList, const int pickupFloorNum) const {
+    // check that the length of the pickupList is less than or equal
+    // to the capacity of an elevator
+    if (pickupList.size() > ELEVATOR_CAPACITY) {
+        return false;
+    }
+
+    int goingup = 0;
+    int goingdown = 0;
+        
+    // loop thrpough pickupList and validate
+    for (size_t i = 0; i < pickupList.size(); ++i) {
+        char c = pickupList.at(i);
+        // check for duplicate indices present in pickupList
+        if (pickupList.find_last_of(c) != i) {
+            return false;
+        }
+        // check for valid digits
+        if (!isdigit(c)) {
+            return false;
+        }
+
+        // convert char to int
+        int n = c - '0';
+
+        // check the maximum value pointed to by an index of pickupList is less than 
+        // the number of people on the floor pointed to by pickupFloorNum
+        if (n >= building.getFloorByFloorNum(pickupFloorNum).getNumPeople()) {
+            return false;
+        }
+
+        // check if person is already at the target floor
+        if (building.getFloorByFloorNum(pickupFloorNum).getPersonByIndex(n).getTargetFloor() == pickupFloorNum) {
+            return false;
+        }
+
+        // check if each person is going in the same direction relative to pickupFloorNum
+        if (building.getFloorByFloorNum(pickupFloorNum).getPersonByIndex(n).getTargetFloor() < pickupFloorNum) {
+            ++goingup;
+        } else {
+            ++goingdown;
+        }
+        if (goingup > 0 && goingdown > 0) {
+            return false;
+        }
+    }
+
     return true;
 }
 

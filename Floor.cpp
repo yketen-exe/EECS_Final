@@ -4,8 +4,8 @@
  * Floor.cpp
  * Project UID 28eb18c2c1ce490aada441e65559efdd
  *
- * <#Names#>
- * <#Uniqnames#>
+ * Alec Murrell, Ethan George, Joey Painter, Sophia Liang
+ * alecmurr, eten, painterj, sxliang
  *
  * Final Project - Elevators
  */
@@ -16,9 +16,8 @@
 using namespace std;
 
 int Floor::tick(int currentTime) {
-    //TODO: Implement tick
     int explodedNumber = 0;
-    int explodedIndex[explodedNumber];
+    int explodedIndex[MAX_PEOPLE_PER_FLOOR];
     for (int i = 0; i < numPeople; i++) {
         if (people[i].tick(currentTime) == true) {
             explodedIndex[explodedNumber] = i;
@@ -27,12 +26,10 @@ int Floor::tick(int currentTime) {
         }
     }
     removePeople(explodedIndex, explodedNumber);
-    //returning 0 to prevent compilation error
     return explodedNumber;
 }
 
 void Floor::addPerson(Person newPerson, int request) {
-    //TODO: Implement addPerson
     if (numPeople < MAX_PEOPLE_PER_FLOOR) {
         people[numPeople] = newPerson;
         numPeople ++;
@@ -45,10 +42,9 @@ void Floor::addPerson(Person newPerson, int request) {
     }
 }
 
-
 void Floor::removePeople(int indicesToRemove[MAX_PEOPLE_PER_FLOOR], int numPeopleToRemove) {
-    //TODO: Implement removePeople
-    sort(indicesToRemove, indicesToRemove + numPeopleToRemove);
+    // TODO: this wouldn't compile for me
+    //sort(indicesToRemove, indicesToRemove + numPeopleToRemove);
     int currentRemove = numPeopleToRemove - 1;
     for (int i = 0; i < numPeopleToRemove; i++) {
         int index = indicesToRemove[currentRemove];
@@ -62,7 +58,6 @@ void Floor::removePeople(int indicesToRemove[MAX_PEOPLE_PER_FLOOR], int numPeopl
 }
 			
 void Floor::resetRequests() {
-    //TODO: Implement resetRequests
     hasUpRequest = false;
     hasDownRequest = false;
     for (int i = 0; i < numPeople; i++) {
