@@ -30,9 +30,6 @@ using namespace std;
  *           and updates building with move.
  */
 void Game::playGame(bool isAIModeIn, ifstream& gameFile) {
-    std::mt19937 gen(1);
-    std::uniform_int_distribution<> floorDist(0, 9);
-    std::uniform_int_distribution<> angerDist(0, 3);
 
     // if game input file is not open, exits with status 1
     if (!gameFile.is_open()) {
@@ -46,14 +43,25 @@ void Game::playGame(bool isAIModeIn, ifstream& gameFile) {
     printGameStartPrompt();
     initGame(gameFile);
 
+    //int currentTick = 0;
+    int currentPerson = 0;
+    string line;
+    vector <Person> person;
+
+    // create a vector of people from the file
+    getline(gameFile, line);
+    while (!gameFile.eof()) {
+        // create a Person using the next line
+        getline(gameFile, line);
+        person.push_back(Person(line));
+    }
+
+    // loop through each game tick
     while (true) {
-        int src = floorDist(gen);
-        int dst = floorDist(gen);
-        if (src != dst) {
-            std::stringstream ss;
-            ss << "0f" << src << "t" << dst << "a" << angerDist(gen);
-            Person p(ss.str());
-            building.spawnPerson(p);
+
+        while (currentPerson < person.size() && person.at(currentPerson).getTurn() == building.getTime()) {
+            building.spawnPerson(person.at(currentPerson));
+            ++currentPerson;
         }
 
         building.prettyPrintBuilding(cout);

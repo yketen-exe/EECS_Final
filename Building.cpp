@@ -39,7 +39,6 @@ void Building::update(Move move){
     
 }
 
-
 int Building::tick(Move move){
     time++;
     update(move);
@@ -50,7 +49,6 @@ int Building::tick(Move move){
     for (int j = 0; j < NUM_FLOORS; j++) {
         explodedNumber = explodedNumber + floors[j].tick(time);
     }
-    //returning 0 to prevent compilation error
     return explodedNumber;
 }
 
