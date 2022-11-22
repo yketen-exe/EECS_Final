@@ -43,31 +43,27 @@ void Game::playGame(bool isAIModeIn, ifstream& gameFile) {
     printGameStartPrompt();
     initGame(gameFile);
 
-    //int currentTick = 0;
-    int currentPerson = 0;
+    // loop through each gameFile line
     string line;
-    vector <Person> person;
+    Person person;
+    while (gameFile >> line) {
+        person = Person(line);
+        while (building.getTime() < person.getTurn()) {
+            building.prettyPrintBuilding(cout);
+            satisfactionIndex.printSatisfaction(cout, false);
+            checkForGameEnd();
+            Move nextMove = getMove();
+            update(nextMove);
 
-    // create a vector of people from the file
-    getline(gameFile, line);
-    while (!gameFile.eof()) {
-        // create a Person using the next line
-        getline(gameFile, line);
-        person.push_back(Person(line));
+        }
+        building.spawnPerson(person);
     }
 
-    // loop through each game tick
-    while (true) {
-
-        while (currentPerson < person.size() && person.at(currentPerson).getTurn() == building.getTime()) {
-            building.spawnPerson(person.at(currentPerson));
-            ++currentPerson;
-        }
-
+    // file done processing, keep playing until user quits
+    while(true) {
         building.prettyPrintBuilding(cout);
         satisfactionIndex.printSatisfaction(cout, false);
         checkForGameEnd();
-
         Move nextMove = getMove();
         update(nextMove);
     }
