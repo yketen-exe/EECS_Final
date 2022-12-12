@@ -24,9 +24,9 @@
 */
 string getAIMoveString(const BuildingState& buildingState) {
     string AIMove = "";
-    int maxAnger = 0;
-    int secondMaxAnger = 0;
-    int thirdMaxAnger = 0;
+    int maxAnger = -1;
+    int secondMaxAnger = -1;
+    int thirdMaxAnger = -1;
     int maxAngerFloor = -1;
     int secondAngerFloor = -1;
     int thirdAngerFloor = -1;
@@ -161,11 +161,39 @@ string getAIMoveString(const BuildingState& buildingState) {
                 }
             }
         }
-        AIMove = "e";
-        AIMove.append(1, char(nearestElevator) + 48);
-        AIMove.append(1, 'f');
-        AIMove.append(1, char(maxAngerFloor) + 48);
-        return AIMove;
+        int nearestElevatorFloor = buildingState.elevators[nearestElevator].currentFloor;
+        if (maxAngerFloor == -1) {
+            if (nearestElevatorFloor > 5) {
+                AIMove = "e";
+                AIMove.append(1, char(nearestElevator) + 48);
+                AIMove.append(1, 'f');
+                AIMove.append(1, char(nearestElevatorFloor - 1) + 48);
+                return AIMove;
+            }
+            else if (nearestElevatorFloor < 5) {
+                AIMove = "e";
+                AIMove.append(1, char(nearestElevator) + 48);
+                AIMove.append(1, 'f');
+                AIMove.append(1, char(nearestElevatorFloor + 1) + 48);
+                return AIMove;
+            }
+            else {
+                return "";
+            }
+        }
+        if (nearestDistance == 0 && buildingState.floors[nearestElevatorFloor].numPeople > 0) {
+            AIMove = "e";
+            AIMove.append(1, char(nearestElevator) + 48);
+            AIMove.append(1, 'p');
+            return AIMove;
+        }
+        else {
+            AIMove = "e";
+            AIMove.append(1, char(nearestElevator) + 48);
+            AIMove.append(1, 'f');
+            AIMove.append(1, char(maxAngerFloor) + 48);
+            return AIMove;
+        }
     }
     else {
         int nearestElevator1 = -1;
@@ -179,11 +207,39 @@ string getAIMoveString(const BuildingState& buildingState) {
                 }
             }
         }
-        AIMove = "e";
-        AIMove.append(1, char(nearestElevator1) + 48);
-        AIMove.append(1, 'f');
-        AIMove.append(1, char(maxAngerFloor) + 48);
-        return AIMove;
+        if (maxAngerFloor == -1) {
+            if (buildingState.elevators[nearestElevator1].currentFloor > 5) {
+                AIMove = "e";
+                AIMove.append(1, char(nearestElevator1) + 48);
+                AIMove.append(1, 'f');
+                AIMove.append(1, char(buildingState.elevators[nearestElevator1].currentFloor - 1) + 48);
+                return AIMove;
+            }
+            else if (buildingState.elevators[nearestElevator1].currentFloor < 5) {
+                AIMove = "e";
+                AIMove.append(1, char(nearestElevator1) + 48);
+                AIMove.append(1, 'f');
+                AIMove.append(1, char(buildingState.elevators[nearestElevator1].currentFloor + 1) + 48);
+                return AIMove;
+            }
+            else {
+                return "";
+            }
+        }
+        if (nearestDistance1 == 0) {
+            AIMove = "e";
+            AIMove.append(1, char(nearestElevator1) + 48);
+            AIMove.append(1, 'p');
+            return AIMove;
+        }
+        else {
+            AIMove = "e";
+            AIMove.append(1, char(nearestElevator1) + 48);
+            AIMove.append(1, 'f');
+            AIMove.append(1, char(maxAngerFloor) + 48);
+            return AIMove;
+        }
+       
     }
     return "";
     }
@@ -197,7 +253,7 @@ string getAIMoveString(const BuildingState& buildingState) {
 *           should be picked up. The string should share the exact format
 *           as a human player's pickup list input.
 */
-string getAIPickupList(const Move& move, const BuildingState& buildingState, 
+string getAIPickupList(const Move& move, const BuildingState& buildingState,
                        const Floor& floorToPickup) {
     int maxAnger = 0;
     int targetFloor = -1;
